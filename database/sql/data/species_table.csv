@@ -1,0 +1,125 @@
+id,species_name,latin_name
+1000,White sucker,Catostomus commersoni
+1020,Goby sp.,Gobiidae
+1024,Right sided flatfish sp.,Pleuronectidae
+103,Salmonid species,
+1041,Halibut,Hippoglossus hippoglossus
+111,Brown / sea trout,Salmo trutta
+114,Rainbow trout,Oncorhynchus mykiss
+1152,Grey mullet sp.,Mugilidae
+1172,Shad sp.,Alosa
+1175,Stickleback sp.,Gasterosteidae
+1179,Pomatoschistus sp.,Pomatoschistus
+118,Atlantic salmon,Salmo salar
+1195,Brown / sea trout x rainbow trout hybrid,Salmo trutta x Oncorhynchus mykiss
+1196,Lampetra sp.,Lampetra
+1197,Lampetra sp. > ammocoete,Lampetra
+1198,Lampetra sp. ammocoetes,Lampetra
+131,Brown / sea trout x salmon hybrid,Salmo trutta x Salmo salar
+132,Brown / sea trout x brook trout hybrid,Salmo trutta x Salvelinus fontinalis
+140,Freshwater species,
+151,Barbel,Barbus barbus
+152,Chub,Leuciscus cephalus
+153,Dace,Leuciscus leuciscus
+154,Grayling,Thymallus thymallus
+181,Bleak,Alburnus alburnus
+182,Common bream,Abramis brama
+183,Common carp varieties,Cyprinus carpio
+184,Common [wild] carp,Cyprinus carpio
+185,Ghost carp,Cyprinus carpio
+186,Koi carp,Cyprinus carpio
+187,Leather carp,Cyprinus carpio
+188,Mirror carp,Cyprinus carpio
+189,Crucian carp,Carassius carassius
+190,Goldfish varieties,Carassius auratus
+191,Feral [brown] goldfish,Carassius auratus
+192,Golden goldfish,Carassius auratus
+193,Gudgeon,Gobio gobio
+194,Roach,Rutilus rutilus
+195,Rudd varieties,Scardinius erythrophthalmus
+196,Rudd,Scardinius erythrophthalmus
+197,Golden rudd,Scardinius erythrophthalmus
+198,Ruffe,Gymnocephalus cernuus
+199,Silver bream,Abramis bjoerkna
+200,Tench varieties,Tinca tinca
+201,Tench,Tinca tinca
+202,Golden tench,Tinca tinca
+211,Perch,Perca fluviatilis
+212,Pike varieties,Esox lucius
+213,Pike,Esox lucius
+214,Golden pike,Esox lucius
+241,European eel,Anguilla anguilla
+242,European eels > elvers,Anguilla anguilla
+243,European elvers,Anguilla anguilla
+244,European glass eels,Anguilla anguilla
+281,3-spined stickleback,Gasterosteus aculeatus
+282,10-spined stickleback,Pungitius pungitius
+283,Bullhead,Cottus gobio
+284,Minnow,Phoxinus phoxinus
+285,Spined loach,Cobitis taenia
+286,Stone loach,Barbatula barbatula
+311,Brook lamprey,Lampetra planeri
+312,Brook lamprey > ammocoete,Lampetra planeri
+313,Brook lamprey ammocoetes,Lampetra planeri
+314,River lamprey,Lampetra fluviatilis
+315,River lamprey > ammocoete,Lampetra fluviatilis
+316,River lamprey ammocoetes,Lampetra fluviatilis
+317,Sea lamprey,Petromyzon marinus
+318,Sea lamprey > ammocoete,Petromyzon marinus
+319,Sea lamprey ammocoetes,Petromyzon marinus
+320,Lamprey sp.,Petromyzontidae
+321,Lamprey sp. > ammocoete,Petromyzontidae
+322,Lamprey sp. ammocoetes,Petromyzontidae
+340,Migratory & transitional species,
+341,Common goby,Pomatoschistus microps
+342,Flounder,Platichthys flesus
+343,Golden grey mullet,Liza aurata
+344,Sea bass,Dicentrarchus labrax
+345,Smelt,Osmerus eperlanus
+346,Thick lipped grey mullet,Chelon labrosus
+347,Thin lipped grey mullet,Liza ramada
+371,Allis shad,Alosa alosa
+372,Arctic charr,Salvelinus alpinus
+378,Twaite shad,Alosa fallax
+400,Non-native species,
+403,Bitterling,Rhodeus sericeus
+404,Brook trout,Salvelinus fontinalis
+408,Grass carp,Ctenopharyngodon idella
+412,Motherless minnow / Sunbleak,Leucaspius delineatus
+414,Orfe varieties,Leuciscus idus
+415,Orfe / Ide,Leuciscus idus
+416,Blue orfe,Leuciscus idus
+417,Golden orfe,Leuciscus idus
+418,Pumpkinseed,Lepomis gibbosus
+422,Topmouth gudgeon,Pseudorasbora parva
+423,Wels catfish,Silurus glanis
+424,Zander,Sander lucioperca
+430,Cyprinid hybrids,
+441,Chub x bleak hybrid,Leuciscus cephalus x Alburnus alburnus
+442,Chub x dace hybrid,Leuciscus cephalus x Leuciscus leuciscus
+443,Dace x bleak hybrid,Leuciscus leuciscus x Alburnus alburnus
+445,Roach x chub hybrid,Rutilus rutilus x Leuciscus cephalus
+446,Roach x dace hybrid,Rutilus rutilus x Leuciscus leuciscus
+471,Bleak x roach hybrid,Alburnus alburnus x Rutilus rutilus
+473,Common bream x silver bream hybrid,Abramis brama x Abramis bjoerkna
+475,Common carp x crucian carp hybrid,Cyprinus carpio x Carassius carassius
+476,Goldfish x common carp hybrid,Carassius auratus x Cyprinus carpio
+477,Goldfish x crucian carp hybrid,Carassius auratus x Carassius carassius
+478,Roach x common bream hybrid,Rutilus rutilus x Abramis brama
+479,Roach x rudd hybrid,Rutilus rutilus x Scardinius erythrophthalmus
+480,Roach x silver bream hybrid,Rutilus rutilus x Abramis bjoerkna
+481,Rudd x common bream hybrid,Scardinius erythrophthalmus x Abramis brama
+482,Rudd x silver bream hybrid,Scardinius erythrophthalmus x Abramis bjoerkna
+514,Cod,Gadus morhua
+518,Dab,Limanda limanda
+521,Dover sole,Solea solea
+531,Herring,Clupea harengus
+547,Plaice,Pleuronectes platessa
+550,Pouting / Bib,Trisopterus luscus
+553,Red mullet,Mullus surmuletus
+556,Lozano's goby,Pomatoschistus lozanoi
+557,Sand goby ,Pomatoschistus minutus
+571,Sprat,Sprattus sprattus
+573,Straight-nosed pipefish,Nerophis ophidion
+583,Viviparous blenny,Zoarces viviparus
+584,Whiting,Merlangius merlangus

@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  fish:
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    container_name: fish
+
+    ports:
+      - "1066:5432"
+    restart: always
