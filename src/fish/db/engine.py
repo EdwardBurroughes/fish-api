@@ -31,3 +31,11 @@ def init_db(creds: Creds):
     url = build_conn_string(creds)
     engine = create_engine(url)
     DBSession.configure(bind=engine)
+
+
+def get_db():
+    db = DBSession()
+    try:
+        yield db
+    finally:
+        db.close()

@@ -4,13 +4,15 @@ from starlette.requests import Request
 
 from src.fish.db.engine import init_db, Creds
 from src.fish.middleware import (
-    fail_with_bad_query_params, wrap_response_with_pagination_results,
+    fail_with_bad_query_params,
+    wrap_response_with_pagination_results,
 )
 from src.fish.routers.species import router as species_router
 from src.fish.routers.sites import router as sites_router
 from src.fish.routers.surverys import router as surveys_router
 from dotenv import dotenv_values
 from fastapi.responses import JSONResponse
+
 app = FastAPI()
 AVAILABLE_PATHS = ("sites", "species", "surveys")
 
@@ -33,7 +35,7 @@ async def startup_event():
 async def home(request: Request):
     return JSONResponse(
         status_code=200,
-        content={path: urljoin(str(request.url), path) for path in AVAILABLE_PATHS}
+        content={path: urljoin(str(request.url), path) for path in AVAILABLE_PATHS},
     )
 
 

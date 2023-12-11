@@ -2,8 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Uuid, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-meta_data = MetaData(schema="public", quote_schema=True)
-Base = declarative_base(metadata=meta_data)
+Base = declarative_base()
 
 
 class DBSpecies(Base):
