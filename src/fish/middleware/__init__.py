@@ -1,16 +1,22 @@
 import json
+import urllib.parse
+import uuid
 from collections import namedtuple
-from typing import Optional
+from typing import Optional, Union
+
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from starlette.datastructures import QueryParams, URL
-import urllib.parse
+from starlette.datastructures import URL, QueryParams
 
 from src.fish.db.engine import DBSession
-from src.fish.db.models import DBSites, DBSurvey, DBSpecies, Base
-from src.fish.utils.query_builder import get_model_count, _validate_paginate_param
+from src.fish.db.models import Base, DBSites, DBSpecies, DBSurvey
+from src.fish.utils.query_builder import (
+    PaginationError,
+    _validate_paginate_param,
+    get_model_count,
+)
 
-MODEL_MAP = {"/sites": DBSites, "/survey": DBSurvey, "/species": DBSpecies}
+MODEL_MAP = {"/sites": DBSites, "/surveys": DBSurvey, "/species": DBSpecies}
 MAX_LIMIT = 100
 PaginationKeys = namedtuple("PaginationKeys", ("limit", "skip"))
 
@@ -22,27 +28,27 @@ def build_next_url(url: URL, skip: int, limit: int) -> str:
     return f"{url}?{parsed_params}"
 
 
-def validate_offset_and_limit(query_params: QueryParams, count: int) -> PaginationKeys:
-    skip = query_params.get("skip")
-    limit = query_params.get("limit")
+def validate_offset_and_limit(
+    query_params: QueryParams, count: int
+) -> Union[PaginationKeys, JSONResponse]:
+    skip = query_params.get("skip", "0")
+    limit = query_params.get("limit", "10")
 
-    if skip and limit:
+    try:
         _validate_paginate_param(
             int(skip), count, f"skip of {skip} outside of bounds {0} - {count}"
         )
         _validate_paginate_param(
             int(limit), MAX_LIMIT, f"limit of {limit} outside of bounds {0} - {100}"
         )
-        result = PaginationKeys(limit=int(limit), skip=int(skip))
-    else:
-        # Weirdly default values don't show up in the request query params,
-        # if query params are not explicitly set in the URL!!
-        result = PaginationKeys(10, 0)
-
-    return result
+        return PaginationKeys(limit=int(limit), skip=int(skip))
+    except PaginationError as e:
+        return JSONResponse(status_code=400, content={"reason": str(e)})
 
 
-def generate_next_url(cur_limit, cur_skip, request, total_count) -> Optional[str]:
+def generate_next_url(
+    cur_limit: int, cur_skip: int, request: Request, total_count: int
+) -> Optional[str]:
     skip = cur_skip + cur_limit
     next_skip = None if total_count <= skip else skip
     if next_skip:
@@ -59,7 +65,6 @@ async def wrap_response_in_meta_data(response, total_count: int, next_url: str):
 
 
 def _get_model_count(model: Base):
-    # simple wrapper as you can't use Depends in your own functions
     with DBSession() as session:
         return get_model_count(session, model)
 
@@ -67,9 +72,12 @@ def _get_model_count(model: Base):
 async def wrap_response_with_pagination_results(request: Request, call_next):
     response = await call_next(request)
     model = MODEL_MAP.get(request.url.path)
-    if model is not None:
+    if model is not None and response.status_code == 200:
         total_count = _get_model_count(model)
         page = validate_offset_and_limit(request.query_params, total_count)
+        # bit of a smell but you can't raise HTTPExceptions in fast api middleware
+        if isinstance(page, JSONResponse):
+            return page
         next_url = generate_next_url(page.limit, page.skip, request, total_count)
         return await wrap_response_in_meta_data(
             response, total_count=total_count, next_url=next_url
@@ -77,13 +85,19 @@ async def wrap_response_with_pagination_results(request: Request, call_next):
     return response
 
 
+def is_valid_uuid(id: str):
+    try:
+        uuid.UUID(id)
+        return True
+    except ValueError:
+        return False
+
+
 def retrieve_query_expected_params(path: str) -> set:
-    # currently only limit and offset query params,
-    # logic will need to be smarter when this changes
     expected_params = {"limit", "skip"}
     paths = path.split("/")
     paths_last = paths[len(paths) - 1]
-    if paths_last.isdigit():
+    if paths_last.isdigit() or is_valid_uuid(paths_last):
         expected_params = {}
     return expected_params
 
@@ -101,8 +115,10 @@ def check_for_bad_params(
 
 async def fail_with_bad_query_params(request: Request, call_next):
     path = request.url.path
-    if path != "/":
+    if path != "/" and request.query_params:
         expected_params = retrieve_query_expected_params(path)
-        check_for_bad_params(request.query_params, expected_params)
+        res = check_for_bad_params(request.query_params, expected_params)
+        if res:
+            return res
 
     return await call_next(request)

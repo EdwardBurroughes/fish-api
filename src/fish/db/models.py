@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Uuid, MetaData
+from sqlalchemy import Column, ForeignKey, Integer, MetaData, String, Uuid
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -32,5 +32,5 @@ class DBSurvey(Base):
     species_id = Column(Integer, ForeignKey("fish_species.id"))
     species = relationship(DBSpecies)
     area_id = Column(String, ForeignKey("fish_sites.id"))
-    # TODO -> transform the data here
+    area = relationship(DBSites)
     fish_count = Column(String)

@@ -21,7 +21,7 @@ CREATE TABLE fish_survey (
     survey_ranked_easting int,
     survey_ranked_northing int,
     species_id int,
-    area_id uuid,
+    area_id VARCHAR,
     fish_count VARCHAR
 );
 
@@ -33,4 +33,3 @@ FROM '/docker-entrypoint-initdb.d/data/species_table.csv' DELIMITER ',' CSV HEAD
 
 COPY fish_sites (id, top_tier_site, site_parent_name, site_name, geo_water_body)
 FROM '/docker-entrypoint-initdb.d/data/fish_sites.csv' DELIMITER ',' CSV HEADER;
-

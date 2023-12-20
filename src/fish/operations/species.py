@@ -1,13 +1,13 @@
-from fastapi.exceptions import HTTPException
 from typing import List
 
+from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Query, Session
-from src.fish.db.models import DBSpecies, DBSites, DBSurvey, Base
-from src.fish.operations.output_models import SpeciesResult, SiteBySpecies
+
+from src.fish.db.models import Base, DBSites, DBSpecies, DBSurvey
+from src.fish.operations.output_models import SiteBySpecies, SpeciesResult
 from src.fish.utils.query_builder import (
-    get_all,
     convert_sql_obj_to_dict,
-    _validate_paginate_param,
+    get_all,
     get_item_by_id,
 )
 
@@ -30,10 +30,10 @@ def retrieve_area_by_species_query_builder(id: int, db: Session) -> Query:
             DBSites.site_parent_name,
             DBSites.site_name,
         )
-            .join(DBSurvey, onclause=DBSites.id == DBSurvey.area_id)
-            .join(DBSpecies, onclause=DBSurvey.species_id == DBSpecies.id)
-            .filter(DBSpecies.id == id)
-            .group_by(
+        .join(DBSurvey, onclause=DBSites.id == DBSurvey.area_id)
+        .join(DBSpecies, onclause=DBSurvey.species_id == DBSpecies.id)
+        .filter(DBSpecies.id == id)
+        .group_by(
             DBSites.id,
             DBSites.top_tier_site,
             DBSites.site_parent_name,
@@ -48,26 +48,28 @@ def get_sites_by_species_id_count(db: Session, id: int) -> int:
 
 def get_sites_by_species_id(db: Session, id: int, limit: int, skip: int):
     return (
-        retrieve_area_by_species_query_builder(id, db)
-            .offset(skip)
-            .limit(limit)
-            .all()
+        retrieve_area_by_species_query_builder(id, db).offset(skip).limit(limit).all()
     )
 
 
-def get_fish_sites_for_a_species(db: Session, id: int, limit: int, skip: int) -> List[SiteBySpecies]:
-    validate_limit_skip_for_species(db, id, limit, skip)
-    site_species = get_sites_by_species_id(db, id, limit, skip)
-    if site_species is None:
+def get_fish_sites_for_a_species(
+    db: Session, id: int, limit: int, skip: int
+) -> List[SiteBySpecies]:
+    site_count = get_sites_by_species_id_count(db, id)
+    if not 0 <= limit <= 100:
         raise HTTPException(
-            status_code=404, detail=f"unable to result with site id of {id}"
+            status_code=404, detail=f"limit of {limit} exceeds max limit of 100"
+        )
+
+    if not 0 <= skip <= site_count:
+        raise HTTPException(
+            status_code=404,
+            detail=f"skip of {skip} exceeds total count of {site_count}",
+        )
+
+    site_species = get_sites_by_species_id(db, id, limit, skip)
+    if not site_species:
+        raise HTTPException(
+            status_code=404, detail=f"unable to result with species id of {id}"
         )
     return [SiteBySpecies(**dict(res._mapping)) for res in site_species]
-
-
-def validate_limit_skip_for_species(db: Session, id: int, limit: int, skip: int):
-    site_count = get_sites_by_species_id_count(db, id)
-    _validate_paginate_param(limit, 100, " limit does not fall between range of 0-100")
-    _validate_paginate_param(
-        skip, site_count, f"skip does not fall between range of 0-{site_count}"
-    )

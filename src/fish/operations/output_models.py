@@ -26,7 +26,7 @@ class SpeciesBySite(BaseModel):
 
 
 class SiteBySpecies(BaseModel):
-    id: uuid.UUID
+    id: str
     top_tier_site: str
     site_parent_name: str
     site_name: str

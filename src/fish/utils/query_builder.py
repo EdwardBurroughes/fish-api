@@ -3,8 +3,12 @@ from typing import List, Union
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+
 from src.fish.db.models import Base
-from fastapi.responses import JSONResponse
+
+
+class PaginationError(Exception):
+    pass
 
 
 def get_all(db: Session, sql_model: Base, skip: int, limit: int) -> List[Base]:
@@ -23,14 +27,14 @@ def convert_sql_obj_to_dict(table: Base):
     return {c.name: getattr(table, c.name) for c in table.__table__.columns}
 
 
-def _validate_paginate_param(
-    param: int, upper_bound: int, message: str
-) -> JSONResponse:
+def _validate_paginate_param(param: int, upper_bound: int, message: str):
     if not 0 <= param <= upper_bound:
-        return JSONResponse(status_code=404, content={"reason": message})
+        raise PaginationError(message)
 
 
-def get_item_by_id(db: Session, id: Union[str, int, uuid.UUID], model: Base, result_model):
+def get_item_by_id(
+    db: Session, id: Union[str, int, uuid.UUID], model: Base, result_model
+):
     item = get_by_id(db, id, model)
     if item is None:
         raise HTTPException(status_code=404, detail=f"Unable to find item with ID {id}")

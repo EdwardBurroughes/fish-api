@@ -1,14 +1,16 @@
-from fastapi.exceptions import HTTPException
 from typing import List
 
-from sqlalchemy import func, Integer
+from dotenv import dotenv_values
+from fastapi.exceptions import HTTPException
+from sqlalchemy import Integer, func
 from sqlalchemy.orm import Session
 
+from src.fish.db.engine import DBSession, init_db
 from src.fish.db.models import DBSites, DBSpecies, DBSurvey
 from src.fish.operations.output_models import SiteResult, SpeciesBySite
 from src.fish.utils.query_builder import (
-    get_all,
     convert_sql_obj_to_dict,
+    get_all,
     get_item_by_id,
 )
 
@@ -44,7 +46,7 @@ def get_species_for_a_site(db: Session, id: str):
 
 def get_fish_species_for_a_site(db: Session, id: str):
     site_species = get_species_for_a_site(db, id)
-    if site_species is None:
+    if not site_species:
         raise HTTPException(
             status_code=404, detail=f"unable to get species with site id of {id}"
         )

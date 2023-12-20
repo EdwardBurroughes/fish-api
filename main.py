@@ -1,24 +1,25 @@
 from urllib.parse import urljoin
+
+from dotenv import dotenv_values
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from starlette.requests import Request
 
-from src.fish.db.engine import init_db, Creds
+from src.fish.db.engine import Creds, init_db
 from src.fish.middleware import (
     fail_with_bad_query_params,
     wrap_response_with_pagination_results,
 )
-from src.fish.routers.species import router as species_router
 from src.fish.routers.sites import router as sites_router
+from src.fish.routers.species import router as species_router
 from src.fish.routers.surverys import router as surveys_router
-from dotenv import dotenv_values
-from fastapi.responses import JSONResponse
 
 app = FastAPI()
 AVAILABLE_PATHS = ("sites", "species", "surveys")
 
 
-# TODO: add unit tests + pre-commit
-# TODO: advanced tests with using
+# FINISH unit tests for each route + add pre-commit
+# Add readme
 
 
 def get_creds() -> Creds:
